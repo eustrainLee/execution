@@ -21,3 +21,12 @@ type OperationState interface {
 type integer interface {
 	int | uint | int16 | uint16 | int32 | uint32 | int64 | uint64
 }
+
+type receiverOperation int
+
+const (
+	receiverOperationNone receiverOperation = iota
+	receiverOperationHasValue
+	receiverOperationHasError
+	receiverOperationStoped
+)
