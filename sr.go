@@ -7,7 +7,7 @@ type Receiver[T any] interface {
 }
 
 type Sender[T any] interface {
-	Connected(Receiver[T]) OperationState
+	Connect(Receiver[T]) OperationState
 }
 
 type Scheduler[T any] interface {
