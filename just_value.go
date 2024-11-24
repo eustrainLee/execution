@@ -14,7 +14,7 @@ func JustResultOf[T any](f func() T) Sender[T] {
 }
 
 func (s *justValueSender[T]) Connect(r Receiver[T]) OperationState {
-	return justValueSenderState[T]{}
+	return justValueSenderState[T]{s: s, r: r}
 }
 
 type justValueSenderState[T any] struct {

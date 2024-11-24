@@ -3,11 +3,11 @@ package sr
 type justStopedSender[T any] struct{}
 
 func JustStoped[T any]() Sender[T] {
-	return &justStopedSender[T]{}
+	return justStopedSender[T]{}
 }
 
-func (s *justStopedSender[T]) Connect(r Receiver[T]) OperationState {
-	return justStopedSenderState[T]{}
+func (s justStopedSender[T]) Connect(r Receiver[T]) OperationState {
+	return justStopedSenderState[T]{r: r}
 }
 
 type justStopedSenderState[T any] struct {

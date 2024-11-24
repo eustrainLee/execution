@@ -10,11 +10,11 @@ func Then[From any, To any](s Sender[From], f func(v From) To) Sender[To] {
 }
 
 func (s thenSender[From, To]) Connect(r Receiver[To]) OperationState {
-	return thenSenderState[From, To]{}
+	return thenSenderState[From, To]{s: s, r: r}
 }
 
 type thenSenderState[From any, To any] struct {
-	s *thenSender[From, To]
+	s thenSender[From, To]
 	r Receiver[To]
 }
 
