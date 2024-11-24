@@ -17,3 +17,7 @@ type Scheduler[T any] interface {
 type OperationState interface {
 	Start()
 }
+
+type integer interface {
+	int | uint | int16 | uint16 | int32 | uint32 | int64 | uint64
+}
