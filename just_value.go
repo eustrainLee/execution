@@ -9,10 +9,6 @@ func Just[T any](v T) Sender[T] {
 	return &justValueSender[T]{v: v}
 }
 
-func JustResultOf[T any](f func() T) Sender[T] {
-	return &justValueSender[T]{v: f()}
-}
-
 func (s *justValueSender[T]) Connect(r Receiver[T]) OperationState {
 	return justValueSenderState[T]{s: s, r: r}
 }
