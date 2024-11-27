@@ -13,6 +13,10 @@ func (s thenSender[From, To]) Connect(r Receiver[To]) OperationState {
 	return thenSenderState[From, To]{s: s, r: r}
 }
 
+func (s thenSender[From, To]) Tag() SenderTag {
+	return s.s.Tag()
+}
+
 type thenSenderState[From any, To any] struct {
 	s thenSender[From, To]
 	r Receiver[To]

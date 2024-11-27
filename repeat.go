@@ -12,6 +12,10 @@ func (s repeatSender[T]) Connect(r Receiver[T]) OperationState {
 	return repeatSenderState[T]{s: s, r: r}
 }
 
+func (s repeatSender[T]) Tag() SenderTag {
+	return s.s.Tag() | SenderTagMultiSend
+}
+
 type repeatSenderState[T any] struct {
 	s repeatSender[T]
 	r Receiver[T]

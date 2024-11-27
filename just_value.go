@@ -2,22 +2,28 @@
 package sr
 
 type justValueSender[T any] struct {
-	v T
+	v *T
 }
 
 func Just[T any](v T) Sender[T] {
-	return &justValueSender[T]{v: v}
+	return justValueSender[T]{v: &v}
 }
 
-func (s *justValueSender[T]) Connect(r Receiver[T]) OperationState {
+func (s justValueSender[T]) Connect(r Receiver[T]) OperationState {
 	return justValueSenderState[T]{s: s, r: r}
 }
 
+func (_ justValueSender[T]) Tag() SenderTag {
+	return SenderTagMultiSend | SenderTagMultiConnect // | SenderTagStop
+}
+
 type justValueSenderState[T any] struct {
-	s *justValueSender[T]
+	s justValueSender[T]
 	r Receiver[T]
 }
 
 func (state justValueSenderState[T]) Start() {
-	state.r.SetValue(state.s.v)
+	if state.r != nil {
+		state.r.SetValue(*state.s.v)
+	}
 }

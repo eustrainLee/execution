@@ -10,6 +10,10 @@ func (s justStopedSender[T]) Connect(r Receiver[T]) OperationState {
 	return justStopedSenderState[T]{r: r}
 }
 
+func (s justStopedSender[T]) Tag() SenderTag {
+	return SenderTagMultiSend | SenderTagMultiConnect
+}
+
 type justStopedSenderState[T any] struct {
 	r Receiver[T]
 }

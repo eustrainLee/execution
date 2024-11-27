@@ -13,6 +13,10 @@ func (s justResultOfSender[T]) Connect(r Receiver[T]) OperationState {
 	return justResultOfSenderState[T]{f: s.f, r: r}
 }
 
+func (_ justResultOfSender[T]) Tag() SenderTag {
+	return SenderTagMultiSend | SenderTagMultiConnect
+}
+
 type justResultOfSenderState[T any] struct {
 	f func() T
 	r Receiver[T]

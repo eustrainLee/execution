@@ -8,6 +8,10 @@ func Async[T any](s Sender[T]) Sender[T] {
 	return asyncSender[T]{s: s}
 }
 
+func (s asyncSender[T]) Tag() SenderTag {
+	return SenderTagNone
+}
+
 func (s asyncSender[T]) Connect(r Receiver[T]) OperationState {
 	ar := &asyncReceiver[T]{op: make(chan receiverOperation, 1)}
 	go s.s.Connect(ar).Start()
@@ -30,6 +34,10 @@ func (state asyncSenderState[T]) Start() {
 	default:
 		panic("unknown async state")
 	}
+}
+
+func (state asyncSenderState[T]) Stop() {
+	panic("not supported")
 }
 
 type asyncReceiver[T any] struct {
