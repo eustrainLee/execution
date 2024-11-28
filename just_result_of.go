@@ -2,19 +2,20 @@
 package sr
 
 type justResultOfSender[T any] struct {
-	f func() T
+	tag SenderTag
+	f   func() T
 }
 
-func JustResultOf[T any](f func() T) Sender[T] {
-	return justResultOfSender[T]{f: f}
+func JustResultOf[T any](f func() T, tag SenderTag) Sender[T] {
+	return justResultOfSender[T]{f: f, tag: tag}
 }
 
 func (s justResultOfSender[T]) Connect(r Receiver[T]) OperationState {
 	return justResultOfSenderState[T]{f: s.f, r: r}
 }
 
-func (_ justResultOfSender[T]) Tag() SenderTag {
-	return SenderTagMultiShot
+func (s justResultOfSender[T]) Tag() SenderTag {
+	return s.tag
 }
 
 type justResultOfSenderState[T any] struct {
