@@ -1,4 +1,4 @@
-// sender factory: JustResultOf
+// sender factory: LetValue
 package sr
 
 type letValueSender[T any] struct {
