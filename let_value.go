@@ -11,7 +11,7 @@ func LetValue[T any, R any](f func(T) R, s Sender[T]) Sender[R] {
 }
 
 func (s letValueSender[T, R]) Connect(r Receiver[R]) OperationState {
-	return letValueSenderState[T, R]{f: s.f, r: r}
+	return letValueSenderState[T, R]{s: s.s, f: s.f, r: r}
 }
 
 func (s letValueSender[T, R]) Tag() SenderTag {
