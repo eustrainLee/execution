@@ -3,9 +3,8 @@ package sr
 type SenderTag uint32
 
 const (
-	SenderTagNone         SenderTag = 0
-	SenderTagMultiSend    SenderTag = 1 << iota // If the tag has set, It can be used multipy in each operation state.
-	SenderTagMultiConnect                       // If the tag has set, It can be Connect to multiple receiver.
+	SenderTagNone      SenderTag = 0
+	SenderTagMultiShot SenderTag = 1 << iota // If the tag has set, It can be Connect to multiple receiver.
 	// SenderTagStop                               // If the tag has set, It can be stoped by operation state.
 )
 
@@ -26,10 +25,6 @@ type Scheduler[T any] interface {
 
 type OperationState interface {
 	Start()
-}
-
-type integer interface {
-	int | uint | int16 | uint16 | int32 | uint32 | int64 | uint64
 }
 
 type receiverOperation int

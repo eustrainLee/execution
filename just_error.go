@@ -13,7 +13,7 @@ func (s justErrorSender[T]) Connect(r Receiver[T]) OperationState {
 }
 
 func (s justErrorSender[T]) Tag() SenderTag {
-	return SenderTagMultiSend | SenderTagMultiConnect
+	return SenderTagMultiShot
 }
 
 type justErrorSenderState[T any] struct {

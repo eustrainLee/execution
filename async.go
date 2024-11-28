@@ -1,5 +1,7 @@
 package sr
 
+import "fmt"
+
 type asyncSender[T any] struct {
 	s Sender[T]
 }
@@ -24,7 +26,7 @@ type asyncSenderState[T any] struct {
 }
 
 func (state asyncSenderState[T]) Start() {
-	switch <-state.ar.op {
+	switch op := <-state.ar.op; op {
 	case receiverOperationHasValue:
 		state.r.SetValue(state.ar.v)
 	case receiverOperationHasError:
@@ -32,7 +34,7 @@ func (state asyncSenderState[T]) Start() {
 	case receiverOperationStoped:
 		state.r.SetStoped()
 	default:
-		panic("unknown async state")
+		panic(fmt.Errorf("unknown async state: %v", op))
 	}
 }
 

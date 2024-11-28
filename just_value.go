@@ -14,7 +14,7 @@ func (s justValueSender[T]) Connect(r Receiver[T]) OperationState {
 }
 
 func (_ justValueSender[T]) Tag() SenderTag {
-	return SenderTagMultiSend | SenderTagMultiConnect // | SenderTagStop
+	return SenderTagMultiShot
 }
 
 type justValueSenderState[T any] struct {
