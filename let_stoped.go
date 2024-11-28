@@ -24,5 +24,6 @@ type letStopedSenderState[T any] struct {
 }
 
 func (state letStopedSenderState[T]) Start() {
+	state.f()
 	state.r.SetStoped()
 }
