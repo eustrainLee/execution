@@ -1,7 +1,6 @@
 package sr
 
 import (
-	"context"
 	"sync"
 )
 
@@ -31,7 +30,7 @@ type splitSenderState[T any] struct {
 	r Receiver[T]
 }
 
-func (state splitSenderState[T]) Start(ctx context.Context) {
-	state.s.once.Do(func() { state.s.s.Connect(&state.s.buff).Start(ctx) })
+func (state splitSenderState[T]) Start() {
+	state.s.once.Do(state.s.s.Connect(&state.s.buff).Start)
 	state.s.buff.Forward(state.r)
 }

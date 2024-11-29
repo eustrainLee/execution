@@ -3,7 +3,7 @@ package sr
 import "errors"
 
 type TrivalReceiver[T any] struct {
-	Op     receiverOperation
+	Op     ReceiverOperation
 	Value  T
 	Error  error
 	Stoped bool
@@ -21,11 +21,11 @@ func (tr *TrivalReceiver[T]) SetStoped() {
 
 func (tr *TrivalReceiver[T]) Forward(r Receiver[T]) {
 	switch tr.Op {
-	case receiverOperationStoped:
+	case ReceiverOperationStoped:
 		r.SetStoped()
-	case receiverOperationHasError:
+	case ReceiverOperationHasError:
 		r.SetError(tr.Error)
-	case receiverOperationHasValue:
+	case ReceiverOperationHasValue:
 		r.SetValue(tr.Value)
 	default:
 		panic(errors.New("receiver not ready"))

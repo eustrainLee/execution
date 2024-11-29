@@ -1,14 +1,12 @@
 // sender factory: LetValue
 package sr
 
-import "context"
-
 type letValueSender[T any, R any] struct {
 	s Sender[T]
-	f func(context.Context, T, Receiver[R])
+	f func(T, Receiver[R])
 }
 
-func LetValue[T any, R any](s Sender[T], f func(context.Context, T, Receiver[R])) Sender[R] {
+func LetValue[T any, R any](s Sender[T], f func(T, Receiver[R])) Sender[R] {
 	return letValueSender[T, R]{f: f, s: s}
 }
 
@@ -22,22 +20,21 @@ func (s letValueSender[T, R]) Tag() SenderTag {
 
 type letValueSenderState[T any, R any] struct {
 	s Sender[T]
-	f func(context.Context, T, Receiver[R])
+	f func(T, Receiver[R])
 	r Receiver[R]
 }
 
-func (state letValueSenderState[T, R]) Start(ctx context.Context) {
-	state.s.Connect(letValueReceiver[T, R]{ctx: ctx, f: state.f, r: state.r}).Start(ctx)
+func (state letValueSenderState[T, R]) Start() {
+	state.s.Connect(letValueReceiver[T, R]{f: state.f, r: state.r}).Start()
 }
 
 type letValueReceiver[T any, R any] struct {
-	ctx context.Context
-	f   func(context.Context, T, Receiver[R])
-	r   Receiver[R]
+	f func(T, Receiver[R])
+	r Receiver[R]
 }
 
 func (lvr letValueReceiver[T, R]) SetValue(v T) {
-	lvr.f(lvr.ctx, v, lvr.r)
+	lvr.f(v, lvr.r)
 }
 
 func (lvr letValueReceiver[T, R]) SetError(err error) {

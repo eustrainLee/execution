@@ -1,4 +1,10 @@
-package sr
+package src
+
+import (
+	"context"
+
+	"github.com/eustrainLee/sr"
+)
 
 type stopedAsErrorSender[T any] struct {
 	s   Sender[T]
@@ -9,27 +15,27 @@ func StopedAsError[T any](s Sender[T], err error) Sender[T] {
 	return stopedAsErrorSender[T]{s: s}
 }
 
-func (s stopedAsErrorSender[T]) Tag() SenderTag {
+func (s stopedAsErrorSender[T]) Tag() sr.SenderTag {
 	return s.s.Tag()
 }
 
-func (s stopedAsErrorSender[T]) Connect(r Receiver[T]) OperationState {
+func (s stopedAsErrorSender[T]) Connect(r sr.Receiver[T]) OperationState {
 	return stopedAsErrorOperationState[T]{s: s.s, r: r, err: s.err}
 }
 
 type stopedAsErrorOperationState[T any] struct {
 	s   Sender[T]
-	r   Receiver[T]
+	r   sr.Receiver[T]
 	err error
 }
 
-func (os stopedAsErrorOperationState[T]) Start() {
-	os.s.Connect(stopedAsErrorReceiver[T]{r: os.r, err: os.err}).Start()
+func (os stopedAsErrorOperationState[T]) Start(ctx context.Context) {
+	os.s.Connect(stopedAsErrorReceiver[T]{r: os.r, err: os.err}).Start(ctx)
 }
 
 type stopedAsErrorReceiver[T any] struct {
 	err error
-	r   Receiver[T]
+	r   sr.Receiver[T]
 }
 
 func (r stopedAsErrorReceiver[T]) SetValue(v T) {
