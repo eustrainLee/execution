@@ -1,5 +1,7 @@
 package sr
 
+import "context"
+
 type justErrorSender[T any] struct {
 	err error
 }
@@ -21,7 +23,7 @@ type justErrorSenderState[T any] struct {
 	r   Receiver[T]
 }
 
-func (state justErrorSenderState[T]) Start() {
+func (state justErrorSenderState[T]) Start(context.Context) {
 	if state.r != nil {
 		state.r.SetError(state.err)
 	}

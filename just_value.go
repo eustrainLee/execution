@@ -1,6 +1,8 @@
 // sender factory: JustValue
 package sr
 
+import "context"
+
 type justValueSender[T any] struct {
 	v *T
 }
@@ -22,7 +24,7 @@ type justValueSenderState[T any] struct {
 	r Receiver[T]
 }
 
-func (state justValueSenderState[T]) Start() {
+func (state justValueSenderState[T]) Start(context.Context) {
 	if state.r != nil {
 		state.r.SetValue(*state.s.v)
 	}

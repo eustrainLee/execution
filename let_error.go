@@ -1,12 +1,14 @@
 // sender factory: LetError
 package sr
 
+import "context"
+
 type letErrorSender[T any] struct {
 	s Sender[T]
-	f func(error, Receiver[T])
+	f func(context.Context, error, Receiver[T])
 }
 
-func LetError[T any](s Sender[T], f func(error, Receiver[T])) Sender[T] {
+func LetError[T any](s Sender[T], f func(context.Context, error, Receiver[T])) Sender[T] {
 	return letErrorSender[T]{s: s, f: f}
 }
 
@@ -20,17 +22,18 @@ func (s letErrorSender[T]) Tag() SenderTag {
 
 type letErrorSenderState[T any] struct {
 	s Sender[T]
-	f func(error, Receiver[T])
+	f func(context.Context, error, Receiver[T])
 	r Receiver[T]
 }
 
-func (state letErrorSenderState[T]) Start() {
-	state.s.Connect(letErrorReceiver[T]{f: state.f, r: state.r}).Start()
+func (state letErrorSenderState[T]) Start(ctx context.Context) {
+	state.s.Connect(letErrorReceiver[T]{ctx: ctx, f: state.f, r: state.r}).Start(ctx)
 }
 
 type letErrorReceiver[T any] struct {
-	f func(error, Receiver[T])
-	r Receiver[T]
+	ctx context.Context
+	f   func(context.Context, error, Receiver[T])
+	r   Receiver[T]
 }
 
 func (ler letErrorReceiver[T]) SetValue(v T) {
@@ -38,7 +41,7 @@ func (ler letErrorReceiver[T]) SetValue(v T) {
 }
 
 func (ler letErrorReceiver[T]) SetError(err error) {
-	ler.f(err, ler.r)
+	ler.f(ler.ctx, err, ler.r)
 }
 
 func (ler letErrorReceiver[T]) SetStoped() {

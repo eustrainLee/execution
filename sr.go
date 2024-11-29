@@ -1,5 +1,7 @@
 package sr
 
+import "context"
+
 type SenderTag uint32
 
 const (
@@ -24,7 +26,7 @@ type Scheduler[T any] interface {
 }
 
 type OperationState interface {
-	Start()
+	Start(context.Context)
 }
 
 type receiverOperation int

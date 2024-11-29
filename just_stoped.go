@@ -1,5 +1,7 @@
 package sr
 
+import "context"
+
 type justStopedSender[T any] struct{}
 
 func JustStoped[T any]() Sender[T] {
@@ -18,6 +20,6 @@ type justStopedSenderState[T any] struct {
 	r Receiver[T]
 }
 
-func (state justStopedSenderState[T]) Start() {
+func (state justStopedSenderState[T]) Start(context.Context) {
 	state.r.SetStoped()
 }
