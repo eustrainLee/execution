@@ -50,8 +50,10 @@ func (os *whenAllSliceOperationState[T]) Start(ctx context.Context) {
 			result = append(result, v)
 		case err := <-errChan:
 			os.r.SetError(err)
+			return
 		case <-stopedChan:
 			os.r.SetStoped()
+			return
 		}
 	}
 	os.r.SetValue(result)

@@ -56,8 +56,10 @@ func (os whenAll2OperationState[T1, T2]) Start(ctx context.Context) {
 			result.B = v
 		case err := <-errChan:
 			os.r.SetError(err)
+			return
 		case <-stopedChan:
 			os.r.SetStoped()
+			return
 		}
 	}
 	os.r.SetValue(result)
