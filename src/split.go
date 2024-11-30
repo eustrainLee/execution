@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/eustrainLee/sr"
+	"github.com/eustrainLee/execution/sr"
 )
 
 type splitSender[T any] struct {

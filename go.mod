@@ -1,4 +1,4 @@
-module github.com/eustrainLee/sr
+module github.com/eustrainLee/execution
 
 go 1.18
 
