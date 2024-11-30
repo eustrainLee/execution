@@ -37,19 +37,19 @@ func (os whenAll3OperationState[T1, T2, T3]) Start(ctx context.Context) {
 	errChan := make(chan error)
 	stopedChan := make(chan struct{}, 2)
 	v1Chan := make(chan T1, 1)
-	go os.s.s1.Connect(whenAllReceiver[T1]{
+	go os.s.s1.Connect(sr.ChannelReceiver[T1]{
 		ValueChan:  v1Chan,
 		ErrorChan:  errChan,
 		StopedChan: stopedChan,
 	}).Start(ctx)
 	v2Chan := make(chan T2, 1)
-	go os.s.s2.Connect(whenAllReceiver[T2]{
+	go os.s.s2.Connect(sr.ChannelReceiver[T2]{
 		ValueChan:  v2Chan,
 		ErrorChan:  errChan,
 		StopedChan: stopedChan,
 	}).Start(ctx)
 	v3Chan := make(chan T3, 1)
-	go os.s.s3.Connect(whenAllReceiver[T3]{
+	go os.s.s3.Connect(sr.ChannelReceiver[T3]{
 		ValueChan:  v3Chan,
 		ErrorChan:  errChan,
 		StopedChan: stopedChan,

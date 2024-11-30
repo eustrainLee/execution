@@ -38,7 +38,7 @@ func (os *whenAllSliceOperationState[T]) Start(ctx context.Context) {
 	for i := 0; i < SenderCount; i++ {
 		valueChan := make(chan T, 1)
 		valuesChan = append(valuesChan, valueChan)
-		go os.ss[0].Connect(whenAllReceiver[T]{
+		go os.ss[0].Connect(sr.ChannelReceiver[T]{
 			ValueChan:  valueChan,
 			ErrorChan:  errChan,
 			StopedChan: stopedChan,
