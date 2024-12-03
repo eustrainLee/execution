@@ -30,11 +30,12 @@ type whenAll2OperationState[T1, T2 any] struct {
 }
 
 func (os whenAll2OperationState[T1, T2]) Start(ctx context.Context) {
+	const SenderCount = 2
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	result := lo.Tuple2[T1, T2]{}
 	errChan := make(chan error)
-	stopedChan := make(chan struct{}, 2)
+	stopedChan := make(chan struct{}, SenderCount)
 	v1Chan := make(chan T1, 1)
 	go os.s.s1.Connect(sr.ChannelReceiver[T1]{
 		ValueChan:  v1Chan,
@@ -47,13 +48,10 @@ func (os whenAll2OperationState[T1, T2]) Start(ctx context.Context) {
 		ErrorChan:  errChan,
 		StopedChan: stopedChan,
 	}).Start(ctx)
-	const SenderCount = 2
 	for i := 0; i < SenderCount; i++ {
 		select {
-		case v := <-v1Chan:
-			result.A = v
-		case v := <-v2Chan:
-			result.B = v
+		case result.A = <-v1Chan:
+		case result.B = <-v2Chan:
 		case err := <-errChan:
 			os.r.SetError(err)
 			return
