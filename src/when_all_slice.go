@@ -28,13 +28,13 @@ type whenAllSliceOperationState[T any] struct {
 }
 
 func (os *whenAllSliceOperationState[T]) Start(ctx context.Context) {
+	SenderCount := len(os.ss)
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	SenderCount := len(os.ss)
 	result := make([]T, 0, SenderCount)
 	valuesChan := make([]chan T, 0, SenderCount)
 	errChan := make(chan error)
-	stopedChan := make(chan struct{}, 2)
+	stopedChan := make(chan struct{}, SenderCount)
 	for i := 0; i < SenderCount; i++ {
 		valueChan := make(chan T, 1)
 		valuesChan = append(valuesChan, valueChan)
